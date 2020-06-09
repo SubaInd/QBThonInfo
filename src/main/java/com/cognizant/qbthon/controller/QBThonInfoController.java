@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,13 +27,13 @@ public class QBThonInfoController {
 	@Autowired
 	private QBThonService qbThonService;
 	
-	@PostMapping("/createAssociates")
+	@GetMapping("/createAssociates")
 	public ResponseEntity<List<AssociateDetails>> createAssociates() {
 		return ResponseEntity.status(HttpStatus.CREATED).body(qbThonService.createAssociates());
 		
 	}
 	
-	@PostMapping("/createEvents")
+	@GetMapping("/createEvents")
 	public ResponseEntity<List<EventDetails>> createEvents() {
 		return ResponseEntity.status(HttpStatus.CREATED).body(qbThonService.createEvents());
 		
@@ -49,6 +50,10 @@ public class QBThonInfoController {
 		return ResponseEntity.status(HttpStatus.OK).body(qbThonService.getSkillsList());
 	}
 	
+	@GetMapping("/getDistinctAssocIds")
+	public ResponseEntity<List<String>> getDistinctAssocIds(@RequestParam("skills") String[] eventSkills) {
+		return ResponseEntity.status(HttpStatus.OK).body(qbThonService.getAssocIdList(eventSkills));
+	}
 	@GetMapping("/getUpcomingEventNames")
 	public ResponseEntity<List<String>> getDistinctEventNames(@RequestParam("date") String date) {
 		return ResponseEntity.status(HttpStatus.OK).body(qbThonService.getDistinctEventNames(date));
@@ -57,6 +62,12 @@ public class QBThonInfoController {
 	@GetMapping("/getEventDetailsByEventName")
 	public ResponseEntity<List<EventDetails>> getEventDetailsByEventName(@RequestParam("eventName") String eventName) {
 		return ResponseEntity.status(HttpStatus.OK).body(qbThonService.getEventDetailsByEventName(eventName));
+	}
+	
+	@PostMapping("/createEventDetails")
+	public EventDetails createEvent(@RequestBody EventDetails eventDet) {
+		System.out.println("PostData =>"+eventDet);
+		return qbThonService.createEvent(eventDet);
 	}
 	
 }
