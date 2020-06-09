@@ -150,4 +150,17 @@ public class QBThonService {
 		return mongoTemplate.find(query, EventDetails.class);
 		
 	}
+
+	public List<String> getAssocIdList(String[] eventSkills) {
+		Query query = new Query();
+		if(0 < eventSkills.length) {
+			System.out.println(eventSkills.length);
+			query.addCriteria(Criteria.where("skillList").in(eventSkills));
+		}
+		return mongoTemplate.findDistinct(query, "associateId", AssociateDetails.class, String.class);
+	}
+
+	public EventDetails createEvent(EventDetails eventDet) {
+		return qbThonInfoRepository.insert(eventDet);
+	}
 }
